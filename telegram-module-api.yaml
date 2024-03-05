@@ -1,0 +1,246 @@
+openapi: 3.0.0
+
+info:
+  title: telegram-module-api
+  description: An API to manage monitored Telegram channels and report fetched data
+  version: 1.0.0
+
+tags:
+  - name: configuration
+  - name: channel-subscriptions
+
+paths:
+
+  /configuration:
+    get:
+      tags:
+        - configuration
+      summary: getSystemConfiguration
+      description: Returns current system configuration
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Configuration"
+    post:
+      tags:
+        - configuration
+      summary: updateSystemConfiguration
+      description: Update system configuration
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Configuration"
+
+  /channel-subscriptions:
+    get:
+      tags:
+        - channel-subscriptions
+      summary: getMonitoredChannels
+      description: Get the list of channels that are monitored
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ChannelSubscription"
+    post:
+      tags:
+        - channel-subscriptions
+      summary: addMonitoredChannel
+      description: Add a new channel to the monitored list
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: string
+      responses:
+        '201':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ChannelSubscription"
+
+  /channel-subscriptions/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: number
+    delete:
+      tags:
+        - channel-subscriptions
+      summary: deleteMonitoredChannel
+      description: Delete a channel from the monitored list
+      responses:
+        '204':
+          description: Successful operation
+    put:
+      tags:
+        - channel-subscriptions
+      summary: updateMonitoredChannel
+      description: Update an existing channel in the monitored list
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ChannelSubscription"
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ChannelSubscription"
+
+  /channel-subscriptions/{id}/history:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: number
+      - in: query
+        name: page
+        schema:
+          type: integer
+          default: 0
+          minimum: 0
+      - in: query
+        name: size
+        schema:
+          type: integer
+          default: 50
+    post:
+      tags:
+        - channel-subscriptions
+      summary: getMonitoredChannelHistory
+      description: Get history of the monitored list
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                start_inclusive:
+                  $ref: "#/components/schemas/DateTime"
+                endExclusive:
+                  $ref: "#/components/schemas/DateTime"
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ChannelSubscription"
+
+components:
+
+  schemas:
+
+    DateTime:
+      type: string
+      format: 'date-time'
+      description: "Date-time in ISO 8601 format"
+
+    Configuration:
+      type: object
+      properties:
+        polling_interval:
+          type: string
+          enum: [ hourly, daily ]
+
+    ChannelSubscription:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        link:
+          type: string
+        active:
+          type: boolean
+        live_monitored:
+          type: boolean
+
+    HistoryResponse:
+      type: object
+      properties:
+        posts:
+          type: array
+          items:
+            $ref: "#/components/schemas/Post"
+        pagination_metadata:
+          $ref: "#/components/schemas/PaginationMetadata"
+
+    Post:
+      type: object
+      properties:
+        datetime:
+          $ref: "#/components/schemas/DateTime"
+        text:
+          type: string
+        media:
+          type: boolean
+        reactions:
+          type: array
+          items:
+            type: object
+            properties:
+              name:
+                type: string
+              count:
+                type: number
+        comments:
+          type: array
+          items:
+            type: object
+            properties:
+              datetime:
+                $ref: "#/components/schemas/DateTime"
+              user_id:
+                type: number
+              text:
+                type: string
+
+    PaginationMetadata:
+      type: object
+      required:
+        - totalCount
+        - totalPageCount
+        - pageSize
+        - currentPageSize
+        - currentPageNumber
+      properties:
+        totalCount:
+          description: Total number of items available from all result pages combined
+          type: integer
+        totalPageCount:
+          description: Total number of pages available
+          type: integer
+        pageSize:
+          description: Page size - number of items per result page configured by `size` query parameter or default page size
+          type: integer
+        currentPageSize:
+          description: Number of items in current result page
+          type: integer
+        currentPageNumber:
+          description: Current page number/ordinal
+          type: integer
