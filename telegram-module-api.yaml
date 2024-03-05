@@ -29,6 +29,12 @@ paths:
         - configuration
       summary: updateSystemConfiguration
       description: Update system configuration
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Configuration"
       responses:
         '200':
           description: Successful operation
@@ -64,8 +70,12 @@ paths:
             schema:
               type: object
               properties:
-                id:
+                name:
                   type: string
+                link:
+                  type: string
+                live_monitored:
+                  type: boolean
       responses:
         '201':
           description: Successful operation
