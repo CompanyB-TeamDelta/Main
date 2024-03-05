@@ -24,7 +24,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Configuration"
-    post:
+    put:
       tags:
         - configuration
       summary: updateSystemConfiguration
@@ -150,7 +150,7 @@ paths:
               properties:
                 start_inclusive:
                   $ref: "#/components/schemas/DateTime"
-                endExclusive:
+                end_exclusive:
                   $ref: "#/components/schemas/DateTime"
       responses:
         '200':
@@ -158,7 +158,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ChannelSubscription"
+                $ref: "#/components/schemas/HistoryResponse"
 
 components:
 
@@ -172,9 +172,8 @@ components:
     Configuration:
       type: object
       properties:
-        polling_interval:
-          type: string
-          enum: [ hourly, daily ]
+        polling_interval_hours:
+          type: integer
 
     ChannelSubscription:
       type: object
@@ -233,24 +232,24 @@ components:
     PaginationMetadata:
       type: object
       required:
-        - totalCount
-        - totalPageCount
-        - pageSize
-        - currentPageSize
-        - currentPageNumber
+        - total_count
+        - total_page_count
+        - page_size
+        - current_page_size
+        - current_page_number
       properties:
-        totalCount:
+        total_count:
           description: Total number of items available from all result pages combined
           type: integer
-        totalPageCount:
+        total_page_count:
           description: Total number of pages available
           type: integer
-        pageSize:
+        page_size:
           description: Page size - number of items per result page configured by `size` query parameter or default page size
           type: integer
-        currentPageSize:
+        current_page_size:
           description: Number of items in current result page
           type: integer
-        currentPageNumber:
+        current_page_number:
           description: Current page number/ordinal
           type: integer
