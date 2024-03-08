@@ -1,13 +1,13 @@
-package ua.edu.ukma.systems_design.data_processing;
+package ua.edu.ukma.systems_design.data_processor;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class DataProcessingApplication {
+public class DataProcessorApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(DataProcessingApplication.class, args);
+        SpringApplication.run(DataProcessorApplication.class, args);
     }
 
 }
