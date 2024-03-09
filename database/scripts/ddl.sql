@@ -35,3 +35,5 @@ create table post_updates
     media                   json      not null,
     foreign key (channel_subscription_id) references channel_subscriptions (id)
 );
+
+create index idx_channel_subscription_id_fetched_at on post_updates (channel_subscription_id, fetched_at);
