@@ -16,8 +16,20 @@ repositories {
 }
 
 dependencies {
+    compileOnly 'org.projectlombok:lombok:1.18.22'
+    annotationProcessor 'org.projectlombok:lombok:1.18.22'
+
     implementation 'org.springframework.boot:spring-boot-starter'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'mysql:mysql-connector-java:8.0.28'
+
+    implementation 'org.jooq:jooq:3.19.6'
+
+    implementation 'com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.16.2'
+
+    implementation 'org.springframework.cloud:spring-cloud-starter-aws'
+    implementation 'org.springframework.cloud:spring-cloud-starter-aws-messaging:2.2.6.RELEASE'
+    implementation 'com.amazonaws:aws-java-sdk-sqs:1.12.349'
 
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }

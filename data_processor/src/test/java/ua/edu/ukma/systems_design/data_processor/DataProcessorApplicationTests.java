@@ -1,4 +1,4 @@
-package ua.edu.ukma.systems_design.data_processing;
+package ua.edu.ukma.systems_design.data_processor;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
