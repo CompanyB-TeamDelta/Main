@@ -30,7 +30,8 @@ def lambda_handler(event, context):
             message_body = json.dumps({
                 'telegram_channel_id': telegram_channel_id,
                 'from': start.isoformat(),
-                'to': current_datetime.isoformat()
+                'to': current_datetime.isoformat(),
+                'is_backfill': False
             })
 
             response = sqs.send_message(
