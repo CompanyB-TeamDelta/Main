@@ -4,7 +4,7 @@ provider "aws" {
  
 data "archive_file" "zip_the_python_code" {
 type        = "zip"
-source_dir  = "${path.module}/task-task-scheduler/"
+source_dir  = "${path.module}/task-scheduler/"
 output_path = "${path.module}/task-scheduler/shceduler.zip"
 }
  
