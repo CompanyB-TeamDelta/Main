@@ -39,30 +39,30 @@ jobs:
 
     - name: Terraform init
       id: init
-      working-directory: terraform
+      working-directory: terraform/${{ env.SERVICE }}
       run: terraform init
 
     - name: Terraform Format
       id: fmt
-      working-directory: terraform
+      working-directory: terraform/${{ env.SERVICE }}
       run: terraform fmt -check
 
     # Run a terraform validate
     - name: Terraform Validate
       id: validate
-      working-directory: terraform
+      working-directory: terraform/${{ env.SERVICE }}
       # Run even if formatting fails
       if: success() || failure()
       run: terraform validate -no-color
 
     - name: Terraform Plan
       id: plan
-      working-directory: terraform
+      working-directory: terraform/${{ env.SERVICE }}
       run: terraform plan -no-color -out=plan
 
     - name: Terraform apply
       id: apply
-      working-directory: terraform
+      working-directory: terraform/${{ env.SERVICE }}
       env:
         TF_LOG: DEBUG
       run: terraform apply -auto-approve -input=false "plan"
