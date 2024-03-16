@@ -45,13 +45,16 @@ jobs:
       if: success() || failure()
       run: terraform validate -no-color
 
-    - id: plan
+    - name: Terraform Plan
+      id: plan
       env:
         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
       run: terraform plan -no-color
 
-    - name: Deploy new task definition to ECS
+    - name: Terraform apply
       id: apply
-      run: |
-        terraform apply -auto-approve -input=false  
+      env:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      run: terraform apply -auto-approve -input=false
