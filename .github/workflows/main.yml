@@ -24,12 +24,6 @@ jobs:
       with:
         repository: CompanyB-TeamDelta/terraform
         path: terraform
-
-    - name: List files in the main and terraform directories
-      run: |
-        ls -la
-        ls -la terraform
-        ls -la task-scheduler
         
     - name: Configure AWS credentials
       uses: aws-actions/configure-aws-credentials@v2
