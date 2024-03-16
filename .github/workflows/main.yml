@@ -24,17 +24,13 @@ jobs:
       with:
         repository: CompanyB-TeamDelta/terraform
         path: terraform
-
+        
     - name: Configure AWS credentials
       uses: aws-actions/configure-aws-credentials@v2
       with:
         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         aws-region: ${{ env.AWS_REGION }}
-
-    - name: cd
-      run: |
-        cd terraform/${{ env.SERVICE }}
 
     - name: Setup Terraform 
       uses: hashicorp/setup-terraform@v3
@@ -43,25 +39,30 @@ jobs:
 
     - name: Terraform init
       id: init
+      working-directory: terraform
       run: terraform init
 
     - name: Terraform Format
       id: fmt
+      working-directory: terraform
       run: terraform fmt -check
 
     # Run a terraform validate
     - name: Terraform Validate
       id: validate
+      working-directory: terraform
       # Run even if formatting fails
       if: success() || failure()
       run: terraform validate -no-color
 
     - name: Terraform Plan
       id: plan
+      working-directory: terraform
       run: terraform plan -no-color -out=plan
 
     - name: Terraform apply
       id: apply
+      working-directory: terraform
       env:
         TF_LOG: DEBUG
       run: terraform apply -auto-approve -input=false "plan"
