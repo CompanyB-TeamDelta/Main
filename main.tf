@@ -9,9 +9,10 @@ data "archive_file" "zip_the_python_code" {
 }
 
 resource "aws_lambda_function" "terraform_lambda_func" {
-  filename      = "${path.module}/task-scheduler/scheduler.zip"
-  function_name = "shceduler"
-  role          = "arn:aws:iam::531190140983:role/service-role/testFc-role-l1r1aw1v"
-  handler       = "index.lambda_handler"
-  runtime       = "python3.8"
+  filename         = "${path.module}/task-scheduler/scheduler.zip"
+  function_name    = "shceduler"
+  role             = "arn:aws:iam::531190140983:role/service-role/testFc-role-l1r1aw1v"
+  handler          = "index.lambda_handler"
+  runtime          = "python3.8"
+  source_code_hash = filebase64sha256("${path.module}/task-scheduler/scheduler.zip")
 }
