@@ -31,3 +31,5 @@ jobs:
 
     - id: plan
       run: terraform plan -no-color
+      
+    - run: terraform apply
