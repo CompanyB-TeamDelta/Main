@@ -1,4 +1,4 @@
-name: DEV - Deploy Lambda to aws ECS
+name: DEV - Deploy Lambda
 env:
   AWS_REGION: us-east-1
   SERVICE: lambda
@@ -20,7 +20,7 @@ jobs:
       uses: actions/checkout@v4
 
     - name: checkout terraform
-    - uses: actions/checkout@v4
+      uses: actions/checkout@v4
       with:
         repository: CompanyB-TeamDelta/terraform
         path: terraform
