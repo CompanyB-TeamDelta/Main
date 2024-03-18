@@ -60,4 +60,5 @@ jobs:
       working-directory: terraform/${{ env.SERVICE }}
       env:
         TF_LOG: DEBUG
+        TF_VAR_mssql_pwd: ${{ secrets.MSSQL_PWD }}
       run: terraform apply -auto-approve -input=false
