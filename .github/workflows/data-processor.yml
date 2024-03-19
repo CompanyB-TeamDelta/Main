@@ -45,7 +45,7 @@ jobs:
     - name: Terraform Format
       id: fmt
       working-directory: terraform/${{ env.SERVICE }}
-      run: terraform fmt -diff
+      run: terraform fmt -check
 
     # Run a terraform validate
     - name: Terraform Validate
