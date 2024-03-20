@@ -38,7 +38,7 @@ jobs:
 
     - name: ls
       run: |
-        cd data-processor
+        cd data-processor/build
         ls -a
         
     - name: Build Docker image
