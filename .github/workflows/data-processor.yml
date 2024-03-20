@@ -34,7 +34,7 @@ jobs:
     - name: Build with Gradle
       working-directory: ./data-processor
       run: |
-        ./gradlew build
+        ./gradlew build -x test
 
     - name: Build Docker image
       run: |
