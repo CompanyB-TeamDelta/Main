@@ -42,7 +42,7 @@ jobs:
         
     - name: Build Docker image
       run: |
-        docker build --platform=linux/amd64 --no-cache -f ./terraform/data-processor/dockerfiles/Dockerfile .
+        docker build --platform=linux/amd64 --no-cache -f ./terraform/data-processor/Dockerfile .
       
     - name: Configure AWS credentials
       uses: aws-actions/configure-aws-credentials@v3
