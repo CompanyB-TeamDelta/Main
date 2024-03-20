@@ -36,9 +36,9 @@ jobs:
       run: |
         ./gradlew build -x test
 
-    - name: Build Docker image
+    - name: ls
       run: |
-        la -a
+        ls -a
         
     - name: Build Docker image
       run: |
