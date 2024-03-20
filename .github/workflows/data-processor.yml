@@ -38,8 +38,8 @@ jobs:
 
     - name: ls
       run: |
-        cd data-processor/build/libs
         ls -a
+        cp data-processor/build/libs/data-processor-0.0.1-SNAPSHOT.jar ./terraform/data-processor/
         
     - name: Build Docker image
       run: |
