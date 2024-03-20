@@ -24,7 +24,20 @@ jobs:
       with:
         repository: CompanyB-TeamDelta/terraform
         path: terraform
+
+    - name: Build with Gradle
+      working-directory: ./data-processor
+      run: |
+        ./gradlew build
+
+    - name: Build Docker image
+      run: |
+        la -a
         
+    - name: Build Docker image
+      run: |
+        docker build --platform=linux/amd64 --no-cache -f ./terraform/data-processor/dockerfiles/Dockerfile .
+      
     - name: Configure AWS credentials
       uses: aws-actions/configure-aws-credentials@v3
       with:
