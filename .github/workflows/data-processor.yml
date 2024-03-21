@@ -46,7 +46,8 @@ jobs:
     - name: Build Docker image
       run: |
         cd ./terraform/data-processor/
-        docker build --platform=linux/amd64 --no-cache -f Dockerfile -t data-processor.tar .
+        docker build --platform=linux/amd64 --no-cache -f Dockerfile -t data-processor .
+        docker save data-processor > "data-processor.tar"
         ls -a
       
     - name: Configure AWS credentials
