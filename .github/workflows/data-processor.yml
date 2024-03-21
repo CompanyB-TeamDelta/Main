@@ -52,6 +52,7 @@ jobs:
 
     - name: add secret
       run: |
+        cd ./terraform/data-processor/
         echo "${{ secrets.DATAPROCKEY }}" >> key.pem
         ls -a
         chmod 400 key.pem
