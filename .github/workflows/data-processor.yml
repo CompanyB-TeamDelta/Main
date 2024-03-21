@@ -52,7 +52,7 @@ jobs:
 
     - name: add secret
       run: |
-        printf ${{ secrets.DATAPROCKEY }} >> key.pem
+        printf "${{ secrets.DATAPROCKEY }}" >> key.pem
         ls -a
       
     - name: Configure AWS credentials
