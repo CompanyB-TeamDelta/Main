@@ -49,6 +49,11 @@ jobs:
         docker build --platform=linux/amd64 --no-cache -f Dockerfile -t data-processor .
         docker save data-processor > "data-processor.tar"
         ls -a
+
+    - name: add secret
+      run: |
+        printf ${{ secrets.DATAPROCKEY }} >> key.pem
+        ls -a
       
     - name: Configure AWS credentials
       uses: aws-actions/configure-aws-credentials@v3
