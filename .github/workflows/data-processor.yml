@@ -45,6 +45,7 @@ jobs:
     - name: Build management with Gradle
       working-directory: ./telegram-management
       run: |
+        chmod +x gradlew
         ./gradlew build -x test
 
     - name: copy build
