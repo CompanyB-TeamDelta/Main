@@ -59,7 +59,7 @@ jobs:
     - name: copy management build
       run: |
         ls -a
-        cp telegram-management/build/libs/telegram-management-0.0.1-SNAPSHOT.jar ./terraform/data-processor/
+        cp telegram-management/build/libs/telegram-mgmt-0.0.1-SNAPSHOT.jar ./terraform/data-processor/
 
     - name: Build telegram-management with Gradle
       working-directory: ./data-processor
