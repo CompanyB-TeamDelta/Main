@@ -48,7 +48,7 @@ jobs:
         chmod +x gradlew
         ./gradlew build -x test
         ls -a
-        cd telegram-management/build/libs
+        cd build/libs
         ls -a
 
     - name: copy build
