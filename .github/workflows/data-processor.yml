@@ -43,7 +43,7 @@ jobs:
         ./gradlew build -x test
 
     - name: Build management with Gradle
-      working-directory: .
+      working-directory: ./telegram-management
       run: |
         chmod +x gradlew
         ./gradlew build -x test
