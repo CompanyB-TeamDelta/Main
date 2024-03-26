@@ -5,7 +5,7 @@ import json
 from datetime import datetime, timedelta, timezone
 
 sqs = boto3.client('sqs')
-queue_url = 'QUEUE_URL'
+queue_url = os.environ['FETCHING_QUEUE_URL']
 
 db_host = os.environ['DB_HOST']
 db_user = os.environ['DB_USER']
