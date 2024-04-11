@@ -51,10 +51,15 @@ jobs:
         cd build/libs
         ls -a
         
-    - name: Build data-proc with Gradle
+    - name: create data-proc yaml
       working-directory: ./data-processor/src/main/resources
       run: |
         echo "${{ secrets.DATAPROCYAML }}" > application.yaml
+        ./gradlew build -x test
+
+    - name: build data-proc
+      working-directory: ./data-processor/
+      run: |
         ./gradlew build -x test
         
     - name: copy build
