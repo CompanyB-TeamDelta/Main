@@ -37,11 +37,11 @@ jobs:
         java-version: '17'
         distribution: 'adopt'
         
-    - name: Build with Gradle
-      working-directory: ./data-processor
+    - name: setup management props
+      working-directory: ./telegram-management/src/main/resources
       run: |
-        ./gradlew build -x test
-
+        echo "${{ secrets.ENVPROP }}" >> env.properties
+        
     - name: Build management with Gradle
       working-directory: ./telegram-management
       run: |
@@ -61,9 +61,10 @@ jobs:
         ls -a
         cp telegram-management/build/libs/telegram-mgmt-0.0.1-SNAPSHOT.jar ./terraform/data-processor/
 
-    - name: Build telegram-management with Gradle
+    - name: Build data-proc with Gradle
       working-directory: ./data-processor
       run: |
+        echo "${{ secrets.DATAPROCYAML }}" > application.yaml
         ./gradlew build -x test
         
     - name: Build Docker image
