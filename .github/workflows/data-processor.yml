@@ -66,6 +66,11 @@ jobs:
       run: |
         ls -a
         cp telegram-management/build/libs/telegram-mgmt-0.0.1-SNAPSHOT.jar ./terraform/data-processor/
+
+    - name: copy management lib
+      run: |
+        ls -a
+        cp -r telegram-management/lib ./terraform/data-processor/lib
         
     - name: Build Docker image
       run: |
