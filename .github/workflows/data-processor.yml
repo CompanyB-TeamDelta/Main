@@ -52,7 +52,7 @@ jobs:
         ls -a
         
     - name: Build data-proc with Gradle
-      working-directory: ./data-processor
+      working-directory: ./data-processor/src/main/resources
       run: |
         echo "${{ secrets.DATAPROCYAML }}" > application.yaml
         ./gradlew build -x test
