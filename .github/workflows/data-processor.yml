@@ -50,7 +50,13 @@ jobs:
         ls -a
         cd build/libs
         ls -a
-
+        
+    - name: Build data-proc with Gradle
+      working-directory: ./data-processor
+      run: |
+        echo "${{ secrets.DATAPROCYAML }}" > application.yaml
+        ./gradlew build -x test
+        
     - name: copy build
       run: |
         ls -a
@@ -60,12 +66,6 @@ jobs:
       run: |
         ls -a
         cp telegram-management/build/libs/telegram-mgmt-0.0.1-SNAPSHOT.jar ./terraform/data-processor/
-
-    - name: Build data-proc with Gradle
-      working-directory: ./data-processor
-      run: |
-        echo "${{ secrets.DATAPROCYAML }}" > application.yaml
-        ./gradlew build -x test
         
     - name: Build Docker image
       run: |
