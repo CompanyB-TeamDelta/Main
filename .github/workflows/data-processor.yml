@@ -82,6 +82,7 @@ jobs:
       run: |
         ls -a
         cp -r telegram-management/lib ./terraform/data-processor/lib
+        cp tdlib/td.binlog ./terraform/data-processor/
         
     - name: Build Docker image
       run: |
