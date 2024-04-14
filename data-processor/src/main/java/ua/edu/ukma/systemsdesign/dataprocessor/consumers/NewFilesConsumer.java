@@ -22,7 +22,7 @@ public class NewFilesConsumer {
             value = "${aws.sqs.new-files-queue}",
             deletionPolicy = SqsMessageDeletionPolicy.ON_SUCCESS)
     public void consumeRequest(@Payload NewFilesRequest request) {
-
+        System.out.println("Consumed");
         postUpdatesService.savePostUpdates(request.getTimestamp(), request.getNewFiles());
     }
 }
