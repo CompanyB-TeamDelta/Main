@@ -18,7 +18,14 @@ jobs:
     steps:
     - name: checkout self
       uses: actions/checkout@v4
-
+      
+    - name: checkout tdlib
+      uses: actions/checkout@v4
+      with:
+        repository: CompanyB-TeamDelta/tdlib
+        token: ${{ secrets.REPO_ACCESS_TOKEN }}
+        path: tdlib
+        
     - name: checkout terraform
       uses: actions/checkout@v4
       with:
