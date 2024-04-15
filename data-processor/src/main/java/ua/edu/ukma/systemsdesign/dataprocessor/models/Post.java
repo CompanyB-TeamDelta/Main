@@ -1,15 +1,26 @@
 package ua.edu.ukma.systemsdesign.dataprocessor.models;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.Value;
 
 import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 
-@Value
+
+@AllArgsConstructor
+@NoArgsConstructor
+@Data
 public class Post {
-    LocalDateTime datetime;
-    String postText;
+    public long post_id;
+    public Date datetime;
+    public String text;
+    public boolean pinned;
+    public int views;
     List<Reaction> reactions;
-    List<Media> mediaInPost;
+    Boolean media_in_post;
+    public boolean is_reply;
     List<Comment> comments;
 }

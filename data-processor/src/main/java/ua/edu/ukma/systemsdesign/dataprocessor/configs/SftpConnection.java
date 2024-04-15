@@ -1,5 +1,7 @@
 package ua.edu.ukma.systemsdesign.dataprocessor.configs;
 
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jcraft.jsch.ChannelSftp;
 import com.jcraft.jsch.JSch;
 import com.jcraft.jsch.Session;
@@ -17,6 +19,7 @@ public class SftpConnection {
     private String server;
     private String username;
     private String password;
+    private final ObjectMapper objectMapper = new ObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES,false);
 
     public SftpConnection(Integer port, String server, String username, String password) {
         this.port = port;
@@ -30,24 +33,24 @@ public class SftpConnection {
     private Session session;
     private ChannelSftp channelSftp;
     private void renewConnection(){
-        if(channelSftp != null) {
-            channelSftp.disconnect();
-            channelSftp = null;
-        }
-        if (session != null) {
-            session.disconnect();
-            session = null;
-        }
         try {
-            session = jsch.getSession(username, server);
-            var config = new Properties();
-            config.put("StrictHostKeyChecking", "no");
-            session.setConfig(config);
-            session.setPassword(password);
-            session.setPort(port);
-            session.connect();
-
+        if(channelSftp !=null && channelSftp.isConnected())
+            return;
+        if(session!= null && session.isConnected()){
             channelSftp = (ChannelSftp) session.openChannel("sftp");
+            return;
+        }
+        session = jsch.getSession(username, server);
+        var config = new Properties();
+        config.put("StrictHostKeyChecking", "no");
+        session.setConfig(config);
+        session.setPassword(password);
+        session.setPort(port);
+        session.connect();
+
+        channelSftp = (ChannelSftp) session.openChannel("sftp");
+//        channelSftp.cd("upload");
+//        channelSftp.cd("1536630827");
         }
         catch (Exception e){
             log.error("[SftpConnection] FAILED TO INSTANTIATE CONNECTION: " + e.getMessage());
@@ -66,6 +69,30 @@ public class SftpConnection {
         }
         finally {
             channelSftp.disconnect();
+        }
+    }
+    public<T> T getFileBytesAndConvert(String src,Class<T> type){
+        try {
+            renewConnection();
+            channelSftp.connect();
+            return objectMapper.readValue(channelSftp.get(src),type);
+        }
+        catch (Exception e){
+            log.error("failed to get input stream: " + e.getMessage());
+            throw new NullPointerException();
+        }
+        finally {
+            channelSftp.disconnect();
+        }
+    }
+
+    public void ls(){
+        try {
+            //todo maybe use this
+            channelSftp.ls("");
+        }
+        catch (Exception e){
+            log.error("failed to ls: " + e.getMessage());
         }
     }
 }
