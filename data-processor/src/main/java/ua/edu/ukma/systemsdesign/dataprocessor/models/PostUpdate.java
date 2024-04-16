@@ -45,6 +45,9 @@ public class PostUpdate {
     @Column(name = "media", nullable = false)
     private boolean media;
     private long views;
+    @ManyToOne
+    @JoinColumn(name = "file_path", referencedColumnName = "filePath", nullable = false)
+    private PostsFiles filePath;
 
     public static PostUpdate of(Post post){
         var pu = new PostUpdate();

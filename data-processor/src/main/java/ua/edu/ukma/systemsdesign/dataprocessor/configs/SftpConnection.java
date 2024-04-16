@@ -10,6 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 
 import java.io.InputStream;
+import java.util.Arrays;
 import java.util.Properties;
 
 @Slf4j
@@ -78,7 +79,7 @@ public class SftpConnection {
             return objectMapper.readValue(channelSftp.get(src),type);
         }
         catch (Exception e){
-            log.error("failed to get input stream: " + e.getMessage());
+            log.error("failed to get input stream: " + e.getMessage() + Arrays.toString(e.getStackTrace()));
             throw new NullPointerException();
         }
         finally {

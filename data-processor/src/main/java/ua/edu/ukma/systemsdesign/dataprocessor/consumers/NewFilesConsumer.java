@@ -28,6 +28,7 @@ public class NewFilesConsumer {
             deletionPolicy = SqsMessageDeletionPolicy.ON_SUCCESS)
     public void consumeRequest( final String input) {
         try {
+            System.out.println("MESSAGE: " + input);
             var files = objectMapper.readValue(input, NewFilesRequest.class);
             postUpdatesService.savePostUpdates(files.getFetched_at(),files.getFiles());
         }
