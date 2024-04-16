@@ -1,31 +1,52 @@
 package ua.edu.ukma.systemsdesign.dataprocessor.services;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import jakarta.annotation.PostConstruct;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import ua.edu.ukma.systemsdesign.dataprocessor.repositories.PostUpdatesRepository;
+import ua.edu.ukma.systemsdesign.dataprocessor.models.PostUpdate;
+import ua.edu.ukma.systemsdesign.dataprocessor.models.PostsFiles;
+import ua.edu.ukma.systemsdesign.dataprocessor.repositories.PostFilesRepository;
+import ua.edu.ukma.systemsdesign.dataprocessor.repositories.PostUpdateRepository;
 
-import java.time.LocalDateTime;
+import java.sql.Timestamp;
+import java.util.Date;
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
+@Slf4j
 public class PostUpdatesService {
 
     private final FtpService ftpService;
-    private final PostUpdatesRepository postUpdatesRepository;
+    private final PostUpdateRepository postUpdatesRepository;
+    private final PostFilesRepository postFilesRepository;
 
-    @Autowired
-    public PostUpdatesService(FtpService ftpService, PostUpdatesRepository postUpdatesRepository) {
-        this.ftpService = ftpService;
-        this.postUpdatesRepository = postUpdatesRepository;
-    }
-
-    public void savePostUpdates(LocalDateTime fetchedAt, List<String> newFiles) {
+    public void savePostUpdates(Date fetchedAt, List<String> newFiles) {
 
         for (String path: newFiles) {
+            var posts = ftpService.getPostUpdate(path);
+            var pf = new PostsFiles();
+            pf.setFetchedAt(Timestamp.from(fetchedAt.toInstant()));
+            pf.setFilePath(path);
 
-            var post = ftpService.getPostUpdate(path);
+            var id = "" + posts.getId();
+            var idL = Long.parseLong("-100" + id);
 
-            postUpdatesRepository.savePostUpdate(fetchedAt, post);
+            postFilesRepository.save(pf);
+            var toSave = posts.getPosts().stream().map(p -> {
+                    var pu = PostUpdate.of(p);
+                    pu.setFetchedAt(Timestamp.from(fetchedAt.toInstant()));
+                    pu.setTelegramChannelId(idL);
+                    pu.setFilePath(pf);
+                    return pu;
+            }).toList();
+            try {
+                postUpdatesRepository.saveAll(toSave);
+            }
+            catch (Exception e){
+                log.error("faield saving: " + e.getMessage());
+            }
         }
     }
 }
