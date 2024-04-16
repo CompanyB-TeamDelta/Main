@@ -12,28 +12,33 @@ db_user = os.environ['DB_USER']
 db_password = os.environ['DB_PASSWORD']
 db_name = os.environ['DB_NAME']
 
-interval_hours = 6
 monitored_window_days = 7
 
 
 def lambda_handler(event, context):
-    current_datetime = datetime.now(timezone.utc)
-    interval_start = current_datetime - timedelta(hours=interval_hours)
-    monitored_window_start = current_datetime - timedelta(days=monitored_window_days)
-
     conn = pymysql.connect(host=db_host, user=db_user, passwd=db_password, db=db_name, connect_timeout=5)
 
     with conn.cursor() as cursor:
-        cursor.execute('select telegram_channel_id from channel_subscriptions where active = true')
+        cursor.execute("select value from configs where name = 'polling_interval_hours'")
+        interval_hours = cursor.fetchone()[0]
 
-        for row in cursor.fetchall():
+        current_datetime = datetime.now(timezone.utc)
+        interval_start = current_datetime - timedelta(hours=interval_hours)
+        monitored_window_start = current_datetime - timedelta(days=monitored_window_days)
+
+        cursor.execute('select telegram_channel_id, live_monitored from channel_subscriptions where active = true')
+        subscription_rows = cursor.fetchall()
+
+        for row in subscription_rows:
             telegram_channel_id = row[0]
+            is_live_monitored = bool(row[1])
 
             message_body = json.dumps({
                 'telegram_channel_id': telegram_channel_id,
                 'from': min(interval_start, monitored_window_start).isoformat(),
                 'to': current_datetime.isoformat(),
-                'is_backfill': False
+                'is_backfill': False,
+                'is_live_monitored': is_live_monitored
             })
 
             response = sqs.send_message(
