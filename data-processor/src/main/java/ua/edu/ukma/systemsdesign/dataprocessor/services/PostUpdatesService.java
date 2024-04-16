@@ -25,7 +25,6 @@ public class PostUpdatesService {
     public void savePostUpdates(Date fetchedAt, List<String> newFiles) {
 
         for (String path: newFiles) {
-
             var posts = ftpService.getPostUpdate(path);
             var pf = new PostsFiles();
             pf.setFetchedAt(Timestamp.from(fetchedAt.toInstant()));
@@ -42,7 +41,12 @@ public class PostUpdatesService {
                     pu.setFilePath(pf);
                     return pu;
             }).toList();
-            postUpdatesRepository.saveAll(toSave);
+            try {
+                postUpdatesRepository.saveAll(toSave);
+            }
+            catch (Exception e){
+                log.error("faield saving: " + e.getMessage());
+            }
         }
     }
 }
