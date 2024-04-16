@@ -33,19 +33,16 @@ public class PostUpdatesService {
 
             var id = "" + posts.getId();
             var idL = Long.parseLong("-100" + id);
+
             postFilesRepository.save(pf);
-            posts.getPosts().forEach(p -> {
-                try {
+            var toSave = posts.getPosts().stream().map(p -> {
                     var pu = PostUpdate.of(p);
                     pu.setFetchedAt(Timestamp.from(fetchedAt.toInstant()));
                     pu.setTelegramChannelId(idL);
                     pu.setFilePath(pf);
-                    postUpdatesRepository.save(pu);
-                }
-                catch (Exception e){
-                    log.error("failed to save postUpdate: " + e.getMessage());
-                }
-            });
+                    return pu;
+            }).toList();
+            postUpdatesRepository.saveAll(toSave);
         }
     }
 }
