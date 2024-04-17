@@ -20,7 +20,7 @@ def lambda_handler(event, context):
 
     with conn.cursor() as cursor:
         cursor.execute("select value from configs where name = 'polling_interval_hours'")
-        interval_hours = cursor.fetchone()[0]
+        interval_hours = int(cursor.fetchone()[0])
 
         current_datetime = datetime.now(timezone.utc)
         interval_start = current_datetime - timedelta(hours=interval_hours)
