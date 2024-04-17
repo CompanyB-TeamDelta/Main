@@ -26,9 +26,22 @@ public class NewFilesConsumer {
     @SqsListener(
             value = "${aws.sqs.new-files-queue}",
             deletionPolicy = SqsMessageDeletionPolicy.ON_SUCCESS)
-    public void consumeRequest( final String input) {
+    public void consumeNewFileRequest( final String input) {
         try {
-            log.info("MESSAGE: " + input);
+            log.info("LIVE MESSAGE: " + input);
+            var files = objectMapper.readValue(input, NewFilesRequest.class);
+            postUpdatesService.savePostUpdates(files.getFetched_at(),files.getFiles());
+        }
+        catch (Exception e){
+            log.error("error: " + e.getMessage());
+        }
+    }
+    @SqsListener(
+            value = "${aws.sqs.backfill-queue}",
+            deletionPolicy = SqsMessageDeletionPolicy.ON_SUCCESS)
+    public void consumeBackfillRequest( final String input) {
+        try {
+            log.info("BACKFILL MESSAGE: " + input);
             var files = objectMapper.readValue(input, NewFilesRequest.class);
             postUpdatesService.savePostUpdates(files.getFetched_at(),files.getFiles());
         }
