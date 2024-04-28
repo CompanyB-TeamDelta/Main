@@ -12,7 +12,7 @@ db_user = os.environ['DB_USER']
 db_password = os.environ['DB_PASSWORD']
 db_name = os.environ['DB_NAME']
 
-monitored_window_days = 7
+monitored_window_days = 1
 
 
 def lambda_handler(event, context):
@@ -26,7 +26,7 @@ def lambda_handler(event, context):
         interval_start = current_datetime - timedelta(hours=interval_hours)
         monitored_window_start = current_datetime - timedelta(days=monitored_window_days)
 
-        cursor.execute('select telegram_channel_id, live_monitored from channel_subscriptions where active = true')
+        cursor.execute('select username, live_monitored from channel_subscriptions where active = true')
         subscription_rows = cursor.fetchall()
 
         for row in subscription_rows:
